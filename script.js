@@ -23,19 +23,30 @@ document.addEventListener("DOMContentLoaded", function () {
   });
   sections[0].style.display = "block";
 });
-// Validação do formulário de contato (exemplo simples)
-document
-  .getElementById("contactForm")
-  .addEventListener("submit", function (event) {
-    event.preventDefault();
-    const name = document.getElementById("name").value;
-    const email = document.getElementById("email").value;
-    const message = document.getElementById("message").value;
 
-    if (name && email && message) {
-      alert("Formulário enviado com sucesso!");
-      this.reset();
-    } else {
-      alert("Por favor, preencha todos os campos.");
+// Alternar entre o tema claro e escuro
+  document.addEventListener("DOMContentLoaded", () => {
+    const themeToggle = document.getElementById("theme-toggle");
+    const body = document.body;
+  
+    // Load saved theme from localStorage
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme === "dark") {
+      body.classList.add("dark-theme");
+      themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
     }
+  
+    // Toggle theme on button click
+    themeToggle.addEventListener("click", () => {
+      body.classList.toggle("dark-theme");
+  
+      // Update button icon
+      if (body.classList.contains("dark-theme")) {
+        themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+        localStorage.setItem("theme", "dark");
+      } else {
+        themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+        localStorage.setItem("theme", "light");
+      }
+    });
   });
