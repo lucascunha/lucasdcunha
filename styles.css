@@ -447,3 +447,154 @@ body.dark-theme .sun-icon {
 body.dark-theme .moon-icon {
   transform: translateY(0);
 }
+
+/* ADD ASSISTENTE VIRTUAL */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  overflow: auto;
+  /* Adicionar flexbox para centralizar o conteúdo */
+  display: none; /* Inicialmente oculto */
+  align-items: center;
+  justify-content: center;
+}
+
+/* Atualizar os estilos do modal para melhorar a legibilidade */
+.modal-content {
+  background-color: var(--bg-color);
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+  width: 80%;
+  max-width: 900px;
+  position: relative;
+  /* Remover margin para usar flexbox do pai */
+  margin: 0;
+  max-height: 90vh; /* Limitar altura para não ultrapassar a viewport */
+  overflow: auto; /* Permitir rolagem se necessário */
+}
+
+/* Adicionar estas variáveis de cores caso não existam no seu CSS */
+:root {
+  /* Cores para o tema claro */
+  --bg-color: #ffffff;
+  --text-color: #333333;
+  --border-color: #dddddd;
+  --secondary-bg-color: #f5f5f5;
+  
+  /* Cores para o tema escuro (se aplicável) */
+  .dark-theme {
+    --bg-color: #222222;
+    --text-color: #f0f0f0;
+    --border-color: #444444;
+    --secondary-bg-color: #333333;
+  }
+}
+
+/* Melhorar o contraste das mensagens */
+.message {
+  padding: 10px 15px;
+  border-radius: 18px;
+  max-width: 80%;
+  word-wrap: break-word;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.user-message {
+  align-self: flex-end;
+  background-color: #1a73e8; /* Azul mais forte */
+  color: white;
+}
+
+.assistant-message {
+  align-self: flex-start;
+  background-color: var(--secondary-bg-color);
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+}
+
+/* Ajustar o tamanho da caixa de texto para ocupar mais espaço */
+.chat-input {
+  display: flex;
+  padding: 15px;
+  border-top: 1px solid var(--border-color);
+  align-items: center;
+  gap: 10px; /* Espaçamento entre o input e o botão */
+}
+
+.chat-input input {
+  flex: 1; /* Faz o input ocupar todo o espaço disponível */
+  padding: 12px 15px; /* Aumentar o padding para um input maior */
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+  font-size: 16px; /* Tamanho de fonte mais confortável */
+  min-height: 24px; /* Altura mínima para o input */
+}
+
+.chat-input button {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 44px; /* Aumentar ligeiramente o tamanho do botão */
+  height: 44px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0; /* Impedir que o botão encolha */
+}
+
+/* Melhorar a área de mensagens para aproveitar o espaço */
+.chat-messages {
+  flex: 1;
+  padding: 15px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  height: 300px; /* Definir uma altura mínima para a área de mensagens */
+}
+
+/* Ajustar o container do modal para melhor uso do espaço */
+.modal-container {
+  display: flex;
+  flex-direction: row;
+  min-height: 500px; /* Altura mínima para o container */
+  max-height: 80vh; /* Altura máxima relativa à viewport */
+}
+
+.modal-chat {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  border-left: 1px solid var(--border-color);
+  min-width: 0; /* Permite que o flex item encolha abaixo da sua largura de conteúdo */
+}
+
+
+/* Ajustar o tamanho da imagem no modal */
+.modal-image {
+  flex: 1;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 300px; /* Limitar a largura máxima do container */
+}
+
+.modal-image img {
+  max-width: 100%;
+  max-height: 300px; /* Limitar a altura máxima da imagem */
+  border-radius: 10px;
+  object-fit: contain; /* Manter proporção da imagem */
+}
