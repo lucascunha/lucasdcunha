@@ -10,10 +10,22 @@ document.addEventListener("DOMContentLoaded", function () {
     link.addEventListener("click", function (event) {
       event.preventDefault();
       const targetId = this.getAttribute("href").substring(1);
+      
+      // Esconde todas as seções
       sections.forEach((section) => {
         section.style.display = "none";
       });
+      
+      // Mostra a seção alvo
       document.getElementById(targetId).style.display = "block";
+      
+      // Remove a classe 'active' de todos os links
+      navLinks.forEach((navLink) => {
+        navLink.classList.remove("active");
+      });
+      
+      // Adiciona a classe 'active' ao link clicado
+      this.classList.add("active");
     });
   });
 
@@ -25,28 +37,28 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 // Alternar entre o tema claro e escuro
-  document.addEventListener("DOMContentLoaded", () => {
-    const themeToggle = document.getElementById("theme-toggle");
-    const body = document.body;
-  
-    // Load saved theme from localStorage
-    const savedTheme = localStorage.getItem("theme");
-    if (savedTheme === "dark") {
-      body.classList.add("dark-theme");
+document.addEventListener("DOMContentLoaded", () => {
+  const themeToggle = document.getElementById("theme-toggle");
+  const body = document.body;
+
+  // Load saved theme from localStorage
+  const savedTheme = localStorage.getItem("theme");
+  if (savedTheme === "dark") {
+    body.classList.add("dark-theme");
+    themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+  }
+
+  // Toggle theme on button click
+  themeToggle.addEventListener("click", () => {
+    body.classList.toggle("dark-theme");
+
+    // Update button icon
+    if (body.classList.contains("dark-theme")) {
       themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+      localStorage.setItem("theme", "dark");
+    } else {
+      themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+      localStorage.setItem("theme", "light");
     }
-  
-    // Toggle theme on button click
-    themeToggle.addEventListener("click", () => {
-      body.classList.toggle("dark-theme");
-  
-      // Update button icon
-      if (body.classList.contains("dark-theme")) {
-        themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
-        localStorage.setItem("theme", "dark");
-      } else {
-        themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
-        localStorage.setItem("theme", "light");
-      }
-    });
   });
+});
