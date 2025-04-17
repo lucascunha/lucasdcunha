@@ -73,13 +73,39 @@ document.addEventListener('DOMContentLoaded', function() {
   const sendButton = document.getElementById('send-button');
   const userInput = document.getElementById('user-input');
   const chatMessages = document.getElementById('chat-messages');
+
+  let conversationHistory = [
+    {
+      role: "system",
+      content: "Você é uma secretária virtual educada, simpática e eficiente. Seu papel é atender pessoas que acessam o site pessoal do Lucas e desejam entrar em contato com ele. Sua tarefa é: Cumprimentar cordialmente a pessoa. Coletar as seguintes informações de forma natural e educada: Nome completo E-mail (ou outra forma de contato preferida) Assunto que deseja tratar ou motivo do contato Agradecer pelo contato e informar que você irá repassar as informações para o Lucas, e que ele entrará em contato assim que possível. Importante: Mantenha um tom amigável, profissional e acolhedor. Seja objetivo, mas gentil ao conduzir a conversa. Se a pessoa não quiser fornecer alguma informação, seja respeitosa e pergunte se há outra forma de contato ou se deseja deixar uma mensagem mesmo assim. Ao final, confirme se todas as informações estão corretas antes de encerrar. Exemplo de encerramento: 'Muito obrigado(a), [nome]! Vou repassar suas informações para o Lucas, e ele entrará em contato com você em breve. Tenha um ótimo dia!'"
+    }
+  ];
   
   // Abrir o modal quando clicar no botão de contato
   contactButton.addEventListener('click', function(e) {
     e.preventDefault();
-    modal.style.display = 'flex'; // Usar flex em vez de block
+    modal.style.display = 'flex';
+    
+    // Limpar histórico de conversa anterior
+    conversationHistory = [
+      {
+        role: "system",
+        content: "Você é um secretário virtual educado, simpático e eficiente. Seu papel é atender pessoas que acessam o site pessoal do Lucas e desejam entrar em contato com ele. Sua tarefa é: Cumprimentar cordialmente a pessoa. Coletar as seguintes informações de forma natural e educada: Nome completo E-mail (ou outra forma de contato preferida) Assunto que deseja tratar ou motivo do contato Agradecer pelo contato e informar que você irá repassar as informações para o Lucas, e que ele entrará em contato assim que possível. Importante: Mantenha um tom amigável, profissional e acolhedor. Seja objetivo, mas gentil ao conduzir a conversa. Se a pessoa não quiser fornecer alguma informação, seja respeitosa e pergunte se há outra forma de contato ou se deseja deixar uma mensagem mesmo assim. Ao final, confirme se todas as informações estão corretas antes de encerrar. Exemplo de encerramento: 'Muito obrigado(a), [nome]! Vou repassar suas informações para o Lucas, e ele entrará em contato com você em breve. Tenha um ótimo dia!'"
+      }
+    ];
+    
+    // Limpar mensagens anteriores
+    chatMessages.innerHTML = '';
+    
     // Adicionar a primeira mensagem do assistente
-    addMessage('Olá! Sou a assistente virtual do Lucas. Como posso ajudar você hoje? Por favor, me informe seu nome e o assunto que gostaria de tratar.', 'assistant');
+    const initialMessage = 'Olá! Sou o assistente virtual do Lucas. Como posso ajudar você hoje? Por favor, me informe seu nome e o assunto que gostaria de tratar.';
+    addMessage(initialMessage, 'assistant');
+    
+    // Adicionar a mensagem inicial ao histórico
+    conversationHistory.push({
+      role: "assistant",
+      content: initialMessage
+    });
   });
   
   // Fechar o modal quando clicar no X
@@ -111,6 +137,12 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Adicionar mensagem do usuário ao chat
     addMessage(message, 'user');
+
+    // Adicionar mensagem do usuário ao histórico
+  conversationHistory.push({
+    role: "user",
+    content: message
+  });
     
     // Limpar input
     userInput.value = '';
@@ -154,7 +186,7 @@ document.addEventListener('DOMContentLoaded', function() {
       chatMessages.appendChild(typingIndicator);
       chatMessages.scrollTop = chatMessages.scrollHeight;
       
-      console.log("Enviando mensagem para o backend:", userMessage);
+      console.log("Enviando conversa para o backend:", conversationHistory);
       
       // URL do endpoint - ajuste conforme seu ambiente
       // Use uma URL absoluta durante o desenvolvimento
@@ -166,7 +198,7 @@ document.addEventListener('DOMContentLoaded', function() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ userMessage }),
+        body: JSON.stringify({ conversationHistory }),
       });
       
       // Remover indicador de digitação
@@ -186,6 +218,12 @@ document.addEventListener('DOMContentLoaded', function() {
       
       // Adicionar resposta do assistente ao chat
       addMessage(data.response, 'assistant');
+
+      // Adicionar resposta do assistente ao histórico
+    conversationHistory.push({
+      role: "assistant",
+      content: data.response
+    });
       
     } catch (error) {
       console.error('Erro ao chamar a API:', error);

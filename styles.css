@@ -598,3 +598,37 @@ body.dark-theme .moon-icon {
   border-radius: 10px;
   object-fit: contain; /* Manter proporção da imagem */
 }
+
+/* ------------------------------------------------------------------
+   HERO BANNER SEM DISTORÇÃO (4:1)
+------------------------------------------------------------------ */
+.hero-banner {
+  /* imagem */
+  background: url("./assets/lucas-cunha-software-developer-java-microservices-banner.png")
+              top center / contain no-repeat;   /* contain evita corte */
+
+  /* faz o bloco crescer sempre na proporção 4:1 = 25 % da largura */
+  aspect-ratio: 4 / 1;      /* moderno, funciona na maioria dos browsers */
+  /* fallback para quem não suporta aspect-ratio (ex.: IE) */
+  /* descomente se precisar 
+  position: relative;
+  }
+  .hero-banner::before {
+    content: "";
+    display: block;
+    padding-top: 25%;  */   /* 396 ÷ 1584 = 0,25 (25 %) */
+/*  }
+  */
+
+  width: 100%;
+  display: flex;            /* centraliza o texto */
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+}
+
+/* opcional: reduz sangria lateral em celulares */
+.hero-banner .container {
+  text-align: center;
+  padding: 0 1rem;
+}

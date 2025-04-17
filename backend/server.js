@@ -28,25 +28,17 @@ const openai = new OpenAI({
 // Endpoint para o chat
 app.post('/api/chat', async (req, res) => {
   try {
-    const { userMessage } = req.body;
+    const { conversationHistory } = req.body;
 
-    if (!userMessage) {
-      return res.status(400).json({ error: 'userMessage is required' });
+    if (!conversationHistory || !Array.isArray(conversationHistory)) {
+      return res.status(400).json({ error: 'conversationHistory é obrigatório e deve ser um array' });
     }
 
-    // Fazer a chamada à API OpenAI
+    // Fazer a chamada à API OpenAI com o histórico completo
     const response = await openai.chat.completions.create({
-      model: "gpt-4.1",
-      messages: [
-        {
-          role: "system",
-          content: "Você é uma secretária virtual educada, simpática e eficiente. Seu papel é atender pessoas que acessam o site pessoal do Lucas e desejam entrar em contato com ele. Sua tarefa é: Cumprimentar cordialmente a pessoa. Coletar as seguintes informações de forma natural e educada: Nome completo E-mail (ou outra forma de contato preferida) Assunto que deseja tratar ou motivo do contato Agradecer pelo contato e informar que você irá repassar as informações para o Lucas, e que ele entrará em contato assim que possível. Importante: Mantenha um tom amigável, profissional e acolhedor. Seja objetivo, mas gentil ao conduzir a conversa."
-        },
-        {
-          role: "user",
-          content: userMessage
-        }
-      ]
+      model: "gpt-4.1", // ou outro modelo disponível na sua conta
+      messages: conversationHistory,
+      max_tokens: 500 // Limitar o tamanho da resposta
     });
 
     return res.json({ response: response.choices[0].message.content });
@@ -58,7 +50,6 @@ app.post('/api/chat', async (req, res) => {
     });
   }
 });
-
 // Rota para verificar se o servidor está funcionando
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok' });
