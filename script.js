@@ -143,57 +143,59 @@ document.addEventListener('DOMContentLoaded', function() {
     chatMessages.scrollTop = chatMessages.scrollHeight;
   }
   
-  // Função para chamar a API da OpenAI
+  // Função para chamar a API da OpenAI através do nosso endpoint Node.js
   async function callOpenAI(userMessage) {
     try {
-      // Esta é a estrutura básica para quando você implementar a API real
-      // Por enquanto, vamos apenas simular uma resposta
+      // Adicionar indicador de digitação
+      const typingIndicator = document.createElement('div');
+      typingIndicator.className = 'message assistant-message';
+      typingIndicator.textContent = 'Digitando...';
+      typingIndicator.id = 'typing-indicator';
+      chatMessages.appendChild(typingIndicator);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
       
-      /* 
-      // Código para implementação futura da API da OpenAI
-      const response = await fetch('https://api.openai.com/v1/chat/completions', {
+      console.log("Enviando mensagem para o backend:", userMessage);
+      
+      // URL do endpoint - ajuste conforme seu ambiente
+      // Use uma URL absoluta durante o desenvolvimento
+      const apiUrl = 'http://localhost:3000/api/chat';
+      
+      // Chamar nosso endpoint Node.js
+      const response = await fetch(apiUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer SUA_CHAVE_API_AQUI'
         },
-        body: JSON.stringify({
-          model: "gpt-4", // ou outro modelo de sua escolha
-          messages: [
-            {
-              role: "system",
-              content: "Você é uma assistente virtual que coleta informações de contato. Seu objetivo é obter o nome, email e assunto de interesse do usuário de forma amigável e profissional."
-            },
-            {
-              role: "user",
-              content: userMessage
-            }
-          ],
-          max_tokens: 150
-        })
+        body: JSON.stringify({ userMessage }),
       });
       
-      const data = await response.json();
-      const assistantResponse = data.choices[0].message.content;
-      */
-      
-      // Simulação de resposta para teste
-      
-      let assistantResponse;
-      
-      if (userMessage.toLowerCase().includes('olá') || userMessage.toLowerCase().includes('oi')) {
-        assistantResponse = "Olá! Por favor, me informe seu nome completo e email para que o Lucas possa entrar em contato com você.";
-      } else if (userMessage.toLowerCase().includes('@')) {
-        assistantResponse = "Obrigada pelo seu email! Qual é o assunto que você gostaria de tratar com o Lucas?";
-      } else {
-        assistantResponse = "Obrigada pelas informações! Vou repassar para o Lucas e ele entrará em contato em breve. Posso ajudar com mais alguma coisa?";
+      // Remover indicador de digitação
+      const typingElement = document.getElementById('typing-indicator');
+      if (typingElement) {
+        typingElement.remove();
       }
       
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error('Erro na resposta da API:', errorData);
+        throw new Error(`HTTP error! status: ${response.status}, message: ${errorData.error || 'Unknown error'}`);
+      }
+      
+      const data = await response.json();
+      console.log("Resposta recebida do backend:", data);
+      
       // Adicionar resposta do assistente ao chat
-      addMessage(assistantResponse, 'assistant');
+      addMessage(data.response, 'assistant');
       
     } catch (error) {
       console.error('Erro ao chamar a API:', error);
+      
+      // Remover indicador de digitação se ainda existir
+      const typingElement = document.getElementById('typing-indicator');
+      if (typingElement) {
+        typingElement.remove();
+      }
+      
       addMessage('Desculpe, ocorreu um erro ao processar sua mensagem. Por favor, tente novamente mais tarde.', 'assistant');
     }
   }
