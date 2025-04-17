@@ -158,7 +158,7 @@ document.addEventListener('DOMContentLoaded', function() {
       
       // URL do endpoint - ajuste conforme seu ambiente
       // Use uma URL absoluta durante o desenvolvimento
-      const apiUrl = 'http://localhost:3000/api/chat';
+      const apiUrl = '/api/chat';
       
       // Chamar nosso endpoint Node.js
       const response = await fetch(apiUrl, {
