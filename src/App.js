@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Calendar, ExternalLink, Github, Linkedin, Twitter, MessageCircle, Send } from 'lucide-react';
+import profileImg from './assets/lucas-cunha-senior-software-engineer-java-spring-microservices.jpg';
 
 // Posts de exemplo - carregados do Medium em caso de Fallback
 const samplePosts = [
@@ -43,12 +44,12 @@ function Chatbot({ isOpen, onClose }) {
     scrollToBottom();
   }, [messages]);
 
-const checkIfShouldSendEmail = (assistantText) => {
-  return assistantText.toLowerCase().includes("conversa finalizada");
-};
+  const checkIfShouldSendEmail = (assistantText) => {
+    return assistantText.toLowerCase().includes("conversa finalizada");
+  };
 
   const cleanAssistantText = (text) =>
-  text.replace(/conversa finalizada/gi, "").trim();
+    text.replace(/conversa finalizada/gi, "").trim();
 
   const sendMessage = async () => {
     if (!inputText.trim()) return;
@@ -125,7 +126,7 @@ const checkIfShouldSendEmail = (assistantText) => {
           ×
         </button>
       </div>
-      
+
       <div className="flex-1 p-4 h-64 overflow-y-auto">
         {messages.map((message) => (
           <div
@@ -133,11 +134,10 @@ const checkIfShouldSendEmail = (assistantText) => {
             className={`mb-3 ${message.sender === 'user' ? 'text-right' : 'text-left'}`}
           >
             <div
-              className={`inline-block max-w-xs px-4 py-2 rounded-lg ${
-                message.sender === 'user'
+              className={`inline-block max-w-xs px-4 py-2 rounded-lg ${message.sender === 'user'
                   ? 'bg-blue-600 text-white rounded-br-none'
                   : 'bg-gray-200 text-gray-800 rounded-bl-none'
-              }`}
+                }`}
             >
               {message.text}
             </div>
@@ -148,15 +148,15 @@ const checkIfShouldSendEmail = (assistantText) => {
             <div className="inline-block bg-gray-200 text-gray-800 px-4 py-2 rounded-lg rounded-bl-none">
               <div className="flex space-x-1">
                 <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce"></div>
-                <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
-                <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
+                <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
               </div>
             </div>
           </div>
         )}
         <div ref={messagesEndRef} />
       </div>
-      
+
       <div className="p-4 border-t">
         <div className="flex space-x-2">
           <input
@@ -184,21 +184,49 @@ function App() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [chatOpen, setChatOpen] = useState(false);
+  const [showMoreAbout, setShowMoreAbout] = useState(false);
+  const [theme, setTheme] = useState(() => {
+    // Detecta preferência do sistema
+    if (typeof window !== "undefined" && window.matchMedia) {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+    return 'light';
+  });
+
+  // Aplica/remover classe 'dark' no <html>
+  useEffect(() => {
+    const root = window.document.documentElement;
+    if (theme === 'dark') {
+      root.classList.add('dark');
+    } else {
+      root.classList.remove('dark');
+    }
+  }, [theme]);
+
+  // Atualiza tema se o sistema mudar
+  useEffect(() => {
+    const mq = window.matchMedia('(prefers-color-scheme: dark)');
+    const handleChange = (e) => setTheme(e.matches ? 'dark' : 'light');
+    mq.addEventListener('change', handleChange);
+    return () => mq.removeEventListener('change', handleChange);
+  }, []);
+
+  const toggleTheme = () => setTheme((t) => (t === 'dark' ? 'light' : 'dark'));
 
   // Carrega os posts quando o componente monta
   useEffect(() => {
     const loadPosts = async () => {
       setLoading(true);
 
-          try {
-      const response = await fetch('/posts.json');
-      const data = await response.json();
-      setPosts(data);
-    } catch (error) {
-      console.error('Erro ao carregar posts:', error);
-      setPosts(samplePosts); // Fallback
-    }
-      
+      try {
+        const response = await fetch('/posts.json');
+        const data = await response.json();
+        setPosts(data);
+      } catch (error) {
+        console.error('Erro ao carregar posts:', error);
+        setPosts(samplePosts); // Fallback
+      }
+
       setLoading(false);
     };
 
@@ -214,18 +242,27 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-950">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b">
+      <header className="bg-white dark:bg-gray-900 shadow-sm border-b dark:border-gray-800">
         <div className="max-w-6xl mx-auto px-4 py-6">
           <div className="flex items-center space-x-4">
-            <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-purple-600 rounded-full flex items-center justify-center text-white text-xl font-bold">
-              LC
-            </div>
+            <img
+              src={profileImg}
+              alt="Lucas Dias da Cunha"
+              className="w-16 h-16 rounded-full object-cover border-2 border-purple-600 shadow"
+            />
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Lucas Dias da Cunha</h1>
-              <p className="text-gray-600">Desenvolvedor Backend</p>
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Lucas Dias da Cunha</h1>
+              <p className="text-gray-600 dark:text-gray-300">Software Developer - Especializado em Desenvolvimento Backend</p>
             </div>
+            <button
+              onClick={toggleTheme}
+              className="ml-auto px-3 py-2 rounded-lg border bg-gray-100 dark:bg-gray-800 dark:text-gray-100 text-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+              aria-label="Alternar modo claro/escuro"
+            >
+              {theme === 'dark' ? '🌙 Escuro' : '☀️ Claro'}
+            </button>
           </div>
         </div>
       </header>
@@ -234,44 +271,44 @@ function App() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Posts Section */}
           <div className="lg:col-span-2">
-            <div className="bg-white rounded-lg shadow-sm border p-6">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">Últimos Posts</h2>
-              
+            <div className="bg-white dark:bg-gray-900 rounded-lg shadow-sm border dark:border-gray-800 p-6">
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Últimos Posts</h2>
+
               {loading ? (
                 <div className="space-y-4">
                   {[1, 2, 3].map((i) => (
                     <div key={i} className="animate-pulse">
-                      <div className="h-6 bg-gray-200 rounded w-3/4 mb-2"></div>
-                      <div className="h-4 bg-gray-200 rounded w-1/4 mb-2"></div>
-                      <div className="h-4 bg-gray-200 rounded w-full"></div>
+                      <div className="h-6 bg-gray-200 dark:bg-gray-800 rounded w-3/4 mb-2"></div>
+                      <div className="h-4 bg-gray-200 dark:bg-gray-800 rounded w-1/4 mb-2"></div>
+                      <div className="h-4 bg-gray-200 dark:bg-gray-800 rounded w-full"></div>
                     </div>
                   ))}
                 </div>
               ) : (
                 <div className="space-y-6">
                   {posts.map((post) => (
-                    <article key={post.id} className="border-b border-gray-200 pb-6 last:border-b-0">
+                    <article key={post.id} className="border-b border-gray-200 dark:border-gray-800 pb-6 last:border-b-0">
                       <div className="group">
-                        <h3 className="text-xl font-semibold text-gray-900 group-hover:text-blue-600 transition-colors mb-2">
+                        <h3 className="text-xl font-semibold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors mb-2">
                           {post.title}
                         </h3>
-                        <div className="flex items-center text-sm text-gray-500 mb-3 space-x-4">
+                        <div className="flex items-center text-sm text-gray-500 dark:text-gray-400 mb-3 space-x-4">
                           <div className="flex items-center">
                             <Calendar size={16} className="mr-2" />
                             {formatDate(post.date)}
                           </div>
                           {post.platform && (
-                            <span className="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium">
+                            <span className="bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 px-2 py-1 rounded-full text-xs font-medium">
                               {post.platform === 'medium' ? 'Medium' : post.platform}
                             </span>
                           )}
                           {post.readTime && (
-                            <span className="text-gray-400">
+                            <span className="text-gray-400 dark:text-gray-500">
                               {post.readTime}
                             </span>
                           )}
                         </div>
-                        <p className="text-gray-700 leading-relaxed mb-4">
+                        <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
                           {post.excerpt}
                         </p>
                         <div className="mt-3">
@@ -279,9 +316,9 @@ function App() {
                             href={post.url || `#`}
                             target={post.url ? "_blank" : "_self"}
                             rel={post.url ? "noopener noreferrer" : ""}
-                            className="text-blue-600 hover:text-blue-800 text-sm font-medium inline-flex items-center hover:underline"
+                            className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 text-sm font-medium inline-flex items-center hover:underline"
                           >
-                            {post.url ? 'Ler no Medium' : 'Ler mais'} 
+                            {post.url ? 'Ler no Medium' : 'Ler mais'}
                             <ExternalLink size={14} className="ml-1" />
                           </a>
                         </div>
@@ -296,27 +333,46 @@ function App() {
           {/* Sidebar */}
           <div className="space-y-6">
             {/* Sobre mim */}
-            <div className="bg-white rounded-lg shadow-sm border p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Sobre mim</h3>
-              <p className="text-gray-700 text-sm leading-relaxed">
-                Desenvolvedor apaixonado por tecnologia, especializado em arquiteturas modernas e escaláveis. 
-                Tenho experiência com Java, Spring, Python e cloud computing.
+            <div className="bg-white dark:bg-gray-900 rounded-lg shadow-sm border dark:border-gray-800 p-6">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Sobre mim</h3>
+              <p className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed">
+                Desenvolvedor apaixonado por tecnologia, especializado em arquiteturas modernas e escaláveis.
+                Tenho experiência com Java, Spring, Microserviços e Cloud Computing.
               </p>
+              <button
+                className="mt-3 text-blue-600 dark:text-blue-400 hover:underline text-sm"
+                onClick={() => setShowMoreAbout((v) => !v)}
+              >
+                {showMoreAbout ? "Ocultar detalhes" : "Quer saber mais sobre minha experiência? Clique aqui"}
+              </button>
+              {showMoreAbout && (
+                <div className="mt-4 text-gray-700 dark:text-gray-300 text-sm leading-relaxed border-t dark:border-gray-800 pt-4">
+                  <ul className="list-disc pl-5 space-y-1">
+                    <li>12+ anos atuando em projetos de TI para <strong>meios de pagamento e autoatendimento</strong>.</li>
+                    <li>Java &nbsp;•&nbsp; Spring Boot &nbsp;•&nbsp; arquitetura de <strong>microserviços</strong> de alta disponibilidade.</li>
+                    <li>Mensageria <strong>ISO-8583</strong> e criptografia HSM para transações seguras.</li>
+                    <li>Ajudo a integrar a maior rede de <strong>ATMs</strong> do Brasil a +40 instituições financeiras.</li>
+                    <li>Experiência com Cloud &nbsp;(<strong>AWS</strong>, OpenShift) com pipelines CI/CD (GitLab) e Docker.</li>
+                    <li>Background em gestão de projetos, análise de requisitos e homologação.</li>
+                    <li>MBA em Full Stack Dev (Impacta) &nbsp;|&nbsp; MBA em Data Science & Analytics (USP).</li>
+                  </ul>
+                </div>
+              )}
             </div>
 
             {/* Links sociais */}
-            <div className="bg-white rounded-lg shadow-sm border p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Conecte-se</h3>
+            <div className="bg-white dark:bg-gray-900 rounded-lg shadow-sm border dark:border-gray-800 p-6">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Conecte-se</h3>
               <div className="space-y-3">
-                <a href="https://www.linkedin.com/in/lucascunha/" className="flex items-center space-x-3 text-gray-700 hover:text-blue-600 transition-colors">
+                <a href="https://www.linkedin.com/in/lucascunha/" className="flex items-center space-x-3 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
                   <Linkedin size={20} />
                   <span>LinkedIn</span>
                 </a>
-                <a href="https://github.com/lucascunha" className="flex items-center space-x-3 text-gray-700 hover:text-gray-900 transition-colors">
+                <a href="https://github.com/lucascunha" className="flex items-center space-x-3 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors">
                   <Github size={20} />
                   <span>GitHub</span>
                 </a>
-                <a href="https://x.com/LcasCunha" className="flex items-center space-x-3 text-gray-700 hover:text-blue-400 transition-colors">
+                <a href="https://x.com/LcasCunha" className="flex items-center space-x-3 text-gray-700 dark:text-gray-300 hover:text-blue-400 dark:hover:text-blue-300 transition-colors">
                   <Twitter size={20} />
                   <span>Twitter</span>
                 </a>
@@ -324,14 +380,14 @@ function App() {
             </div>
 
             {/* Contato */}
-            <div className="bg-white rounded-lg shadow-sm border p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Contato</h3>
-              <p className="text-gray-700 text-sm mb-4">
+            <div className="bg-white dark:bg-gray-900 rounded-lg shadow-sm border dark:border-gray-800 p-6">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Contato</h3>
+              <p className="text-gray-700 dark:text-gray-300 text-sm mb-4">
                 Tem alguma dúvida ou quer bater um papo? Use o chat!
               </p>
               <button
                 onClick={() => setChatOpen(true)}
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors flex items-center justify-center space-x-2"
+                className="w-full bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 text-white px-4 py-2 rounded-lg transition-colors flex items-center justify-center space-x-2"
               >
                 <MessageCircle size={18} />
                 <span>Abrir Chat</span>
@@ -345,9 +401,9 @@ function App() {
       <Chatbot isOpen={chatOpen} onClose={() => setChatOpen(false)} />
 
       {/* Footer */}
-      <footer className="bg-white border-t mt-16">
+      <footer className="bg-white dark:bg-gray-900 border-t dark:border-gray-800 mt-16">
         <div className="max-w-6xl mx-auto px-4 py-8 text-center">
-          <p className="text-gray-600">
+          <p className="text-gray-600 dark:text-gray-400">
             © 2025 Lucas Dias da Cunha. Feito com React e Tailwind CSS.
           </p>
         </div>
