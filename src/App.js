@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Calendar, ExternalLink, Github, Linkedin, Twitter, MessageCircle, Send } from 'lucide-react';
+import profileImg from './assets/lucas-cunha-senior-software-engineer-java-spring-microservices.jpg';
 
 // Posts de exemplo - carregados do Medium em caso de Fallback
 const samplePosts = [
@@ -43,12 +44,12 @@ function Chatbot({ isOpen, onClose }) {
     scrollToBottom();
   }, [messages]);
 
-const checkIfShouldSendEmail = (assistantText) => {
-  return assistantText.toLowerCase().includes("conversa finalizada");
-};
+  const checkIfShouldSendEmail = (assistantText) => {
+    return assistantText.toLowerCase().includes("conversa finalizada");
+  };
 
   const cleanAssistantText = (text) =>
-  text.replace(/conversa finalizada/gi, "").trim();
+    text.replace(/conversa finalizada/gi, "").trim();
 
   const sendMessage = async () => {
     if (!inputText.trim()) return;
@@ -125,7 +126,7 @@ const checkIfShouldSendEmail = (assistantText) => {
           ×
         </button>
       </div>
-      
+
       <div className="flex-1 p-4 h-64 overflow-y-auto">
         {messages.map((message) => (
           <div
@@ -133,11 +134,10 @@ const checkIfShouldSendEmail = (assistantText) => {
             className={`mb-3 ${message.sender === 'user' ? 'text-right' : 'text-left'}`}
           >
             <div
-              className={`inline-block max-w-xs px-4 py-2 rounded-lg ${
-                message.sender === 'user'
+              className={`inline-block max-w-xs px-4 py-2 rounded-lg ${message.sender === 'user'
                   ? 'bg-blue-600 text-white rounded-br-none'
                   : 'bg-gray-200 text-gray-800 rounded-bl-none'
-              }`}
+                }`}
             >
               {message.text}
             </div>
@@ -148,15 +148,15 @@ const checkIfShouldSendEmail = (assistantText) => {
             <div className="inline-block bg-gray-200 text-gray-800 px-4 py-2 rounded-lg rounded-bl-none">
               <div className="flex space-x-1">
                 <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce"></div>
-                <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
-                <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
+                <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
               </div>
             </div>
           </div>
         )}
         <div ref={messagesEndRef} />
       </div>
-      
+
       <div className="p-4 border-t">
         <div className="flex space-x-2">
           <input
@@ -184,21 +184,22 @@ function App() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [chatOpen, setChatOpen] = useState(false);
+  const [showMoreAbout, setShowMoreAbout] = useState(false); // Novo estado
 
   // Carrega os posts quando o componente monta
   useEffect(() => {
     const loadPosts = async () => {
       setLoading(true);
 
-          try {
-      const response = await fetch('/posts.json');
-      const data = await response.json();
-      setPosts(data);
-    } catch (error) {
-      console.error('Erro ao carregar posts:', error);
-      setPosts(samplePosts); // Fallback
-    }
-      
+      try {
+        const response = await fetch('/posts.json');
+        const data = await response.json();
+        setPosts(data);
+      } catch (error) {
+        console.error('Erro ao carregar posts:', error);
+        setPosts(samplePosts); // Fallback
+      }
+
       setLoading(false);
     };
 
@@ -219,12 +220,14 @@ function App() {
       <header className="bg-white shadow-sm border-b">
         <div className="max-w-6xl mx-auto px-4 py-6">
           <div className="flex items-center space-x-4">
-            <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-purple-600 rounded-full flex items-center justify-center text-white text-xl font-bold">
-              LC
-            </div>
+            <img
+              src={profileImg}
+              alt="Lucas Dias da Cunha"
+              className="w-16 h-16 rounded-full object-cover border-2 border-purple-600 shadow"
+            />
             <div>
               <h1 className="text-3xl font-bold text-gray-900">Lucas Dias da Cunha</h1>
-              <p className="text-gray-600">Desenvolvedor Backend</p>
+              <p className="text-gray-600">Software Developer - Especializado em Desenvolvimento Backend</p>
             </div>
           </div>
         </div>
@@ -236,7 +239,7 @@ function App() {
           <div className="lg:col-span-2">
             <div className="bg-white rounded-lg shadow-sm border p-6">
               <h2 className="text-2xl font-bold text-gray-900 mb-6">Últimos Posts</h2>
-              
+
               {loading ? (
                 <div className="space-y-4">
                   {[1, 2, 3].map((i) => (
@@ -281,7 +284,7 @@ function App() {
                             rel={post.url ? "noopener noreferrer" : ""}
                             className="text-blue-600 hover:text-blue-800 text-sm font-medium inline-flex items-center hover:underline"
                           >
-                            {post.url ? 'Ler no Medium' : 'Ler mais'} 
+                            {post.url ? 'Ler no Medium' : 'Ler mais'}
                             <ExternalLink size={14} className="ml-1" />
                           </a>
                         </div>
@@ -299,9 +302,28 @@ function App() {
             <div className="bg-white rounded-lg shadow-sm border p-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">Sobre mim</h3>
               <p className="text-gray-700 text-sm leading-relaxed">
-                Desenvolvedor apaixonado por tecnologia, especializado em arquiteturas modernas e escaláveis. 
-                Tenho experiência com Java, Spring, Python e cloud computing.
+                Desenvolvedor apaixonado por tecnologia, especializado em arquiteturas modernas e escaláveis.
+                Tenho experiência com Java, Spring, Microserviços e Cloud Computing.
               </p>
+              <button
+                className="mt-3 text-blue-600 hover:underline text-sm"
+                onClick={() => setShowMoreAbout((v) => !v)}
+              >
+                {showMoreAbout ? "Ocultar detalhes" : "Quer saber mais sobre minha experiência? Clique aqui"}
+              </button>
+              {showMoreAbout && (
+                <div className="mt-4 text-gray-700 text-sm leading-relaxed border-t pt-4">
+                  <ul className="list-disc pl-5 space-y-1">
+                    <li>12+ anos atuando em projetos de TI para <strong>meios de pagamento e autoatendimento</strong>.</li>
+                    <li>Java &nbsp;•&nbsp; Spring Boot &nbsp;•&nbsp; arquitetura de <strong>microserviços</strong> de alta disponibilidade.</li>
+                    <li>Mensageria <strong>ISO-8583</strong> e criptografia HSM para transações seguras.</li>
+                    <li>Ajudo a integrar a maior rede de <strong>ATMs</strong> do Brasil a +40 instituições financeiras.</li>
+                    <li>Experiência com Cloud &nbsp;(<strong>AWS</strong>, OpenShift) com pipelines CI/CD (GitLab) e Docker.</li>
+                    <li>Background em gestão de projetos, análise de requisitos e homologação.</li>
+                    <li>MBA em Full Stack Dev (Impacta) &nbsp;|&nbsp; MBA em Data Science & Analytics (USP).</li>
+                  </ul>
+                </div>
+              )}
             </div>
 
             {/* Links sociais */}
