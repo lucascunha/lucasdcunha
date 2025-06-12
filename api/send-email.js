@@ -11,6 +11,8 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: "Conversation is required" });
   }
 
+  console.log("Recebido pedido de envio de email:", conversation);
+
   // Configure seu transporte SMTP (exemplo com Gmail)
   const transporter = nodemailer.createTransport({
     service: "gmail",
@@ -28,7 +30,7 @@ export default async function handler(req, res) {
   try {
     await transporter.sendMail({
       from: `"Chatbot Lucas" <${process.env.EMAIL_USER}>`,
-      to: "SEU_EMAIL_AQUI", // seu email de destino
+      to: process.env.EMAIL_USER, // agora pega do .env
       subject: "Novo contato via Chatbot",
       text
     });
