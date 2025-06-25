@@ -291,9 +291,16 @@ function App() {
                   {posts.map((post) => (
                     <article key={post.id} className="border-b border-gray-200 dark:border-gray-800 pb-6 last:border-b-0">
                       <div className="group">
-                        <h3 className="text-xl font-semibold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors mb-2">
-                          {post.title}
-                        </h3>
+                        <a
+                          href={post.url || `#`}
+                          target={post.url ? "_blank" : "_self"}
+                          rel={post.url ? "noopener noreferrer" : ""}
+                          className="hover:underline"
+                        >
+                          <h3 className="text-xl font-semibold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors mb-2">
+                            {post.title}
+                          </h3>
+                        </a>
                         <div className="flex items-center text-sm text-gray-500 dark:text-gray-400 mb-3 space-x-4">
                           <div className="flex items-center">
                             <Calendar size={16} className="mr-2" />
