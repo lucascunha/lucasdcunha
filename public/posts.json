@@ -1,16 +1,17 @@
 [
   {
-    "id": 1,
     "title": "TR-31 Key Block: Implementando um padrão seguro de transporte de chaves criptográficas",
     "date": "2025-06-24",
-    "excerpt": "",
+    "excerpt": "Um guia prático para entender e implementar o padrão TR-31 em ambientes financeiros com HSMs e ATMsVocê já parou para pensar como as próprias chaves de criptografia são protegidas em sistemas financei...",
+    "summary": "<em>Você já parou para pensar como as próprias chaves de criptografia são protegidas em sistemas financeiros?</em>",
     "slug": "tr-31-key-block-implementando-um-padr-o-seguro-de-transporte-de-chaves-criptogr-ficas",
     "url": "https://medium.com/@lucas-cunha/tr-31-key-block-implementando-um-padr%C3%A3o-seguro-de-transporte-de-chaves-criptogr%C3%A1ficas-be1318985381?source=rss-7238cd32a68------2",
     "platform": "medium",
-    "readTime": "5 min"
+    "readTime": "5 min",
+    "id": 3
   },
   {
-    "id": 2,
+    "id": 1,
     "title": "Do Terraform à IA Multicloud: Lições e Implementações do “MultiCloud, DevOps & IA Challenge”",
     "date": "2025-04-09",
     "excerpt": "",
@@ -20,7 +21,7 @@
     "readTime": "5 min"
   },
   {
-    "id": 3,
+    "id": 2,
     "title": "Como mudei de carreira aos 36",
     "date": "2021-07-29",
     "excerpt": "",

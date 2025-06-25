@@ -15,12 +15,11 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: "messages (array) is required" });
   }
 
-  // Novo prompt mais objetivo
   const openaiMessages = [
     {
       role: "system",
       content:
-      "Você é uma secretária virtual eficiente para o site do Lucas. Colete nome, e-mail ou telefone e motivo do contato. Quando tiver tudo, agradeça e encerre dizendo que Lucas retornará em breve. IMPORTANTE: Sempre que encerrar a conversa, inclua a frase 'Conversa finalizada' ao final da sua última mensagem.",
+        "Você é uma secretária virtual eficiente para o site do Lucas. Colete nome, e-mail ou telefone e motivo do contato. Quando tiver tudo, agradeça e encerre dizendo que Lucas retornará em breve. IMPORTANTE: Sempre que encerrar a conversa, inclua a frase 'Conversa finalizada' ao final da sua última mensagem.",
     },
     ...messages.map((msg) => ({
       role: msg.sender === "user" ? "user" : "assistant",

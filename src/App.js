@@ -310,9 +310,10 @@ function App() {
                             </span>
                           )}
                         </div>
-                        <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
-                          {post.excerpt}
-                        </p>
+                        <p
+                          className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4"
+                          dangerouslySetInnerHTML={{ __html: post.summary || post.excerpt }}
+                        />
                         <div className="mt-3">
                           <a
                             href={post.url || `#`}
