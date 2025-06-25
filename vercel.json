@@ -5,6 +5,7 @@
   ],
   "routes": [
     { "src": "/api/(.*)", "dest": "/api/$1.js" },
+    { "src": "/posts.json", "dest": "/posts.json" },
     { "src": "/static/(.*)", "dest": "/static/$1" },
     { "src": "/favicon.ico", "dest": "/favicon.ico" },
     { "src": "/manifest.json", "dest": "/manifest.json" },
